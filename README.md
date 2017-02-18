@@ -87,13 +87,17 @@ See `lib/index.js`
         });
         cursor = parseInt(result[0]);
         const keys = result[1];
+        count += keys.length;
+        if (config.limit > 0 && count > config.limit) {
+            console.error(clc.yellow('Limit reached. Try: limit=0'));
+            break;
+        }
         const results = await multiExecAsync(client, multi => {
             keys.forEach(key => multi.expire(key, config.ttl));
         });
-        if (config.limit > 0 && count > config.limit) {
-            console.error(clc.yellow('Limit exceeded. Try: limit=0'));
-            break;
-        }
+        results.forEach((result, index) => {
+            console.log(clc.green(result), keys[index]);
+        });
         if (cursor === 0) {
             break;
         }
