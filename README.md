@@ -2,7 +2,7 @@
 
 Containerized utility to scan Redis keys and expire keys matching a specified pattern.
 
-<img src="https://raw.githubusercontent.com/evanx/reo/master/docs/readme/main.png"/>
+<img src="https://raw.githubusercontent.com/evanx/scan-expire/master/docs/readme/main.png"/>
 
 ## Use case
 
@@ -41,17 +41,28 @@ module.exports = {
 }
 ```
 
-## Usage
-
-
 ## Docker
 
 You can build as follows:
 ```shell
+docker build -t scan-expire https://github.com/evanx/scan-expire.git
 ```
 
-See `test/demo.sh` https://github.com/evanx/reo/blob/master/test/demo.sh
+See `test/demo.sh` https://github.com/evanx/scan-expire/blob/master/test/demo.sh
 ```shell
+redis-cli -h $redisHost -p 6379 set user:evanxsummers '{"twitter": "@evanxsummers"}'
+redis-cli -h $redisHost -p 6379 set user:other '{"twitter": ""@evanxsummers"}'
+redis-cli -h $redisHost -p 6379 set group:evanxsummers '["evanxsummers"]'
+redis-cli -h $redisHost -p 6379 keys '*'
+appContainer=`docker run --name $appName-app -d \
+  --network=$network \
+  -e host=$redisHost \
+  -e port=6379 \
+  -e pattern='user:*' \
+  -e ttl=1 \
+  $appImage`
+sleep 2
+redis-cli -h $redisHost -p 6379 keys '*'
 ```
 
 Creates:
@@ -60,7 +71,7 @@ Creates:
 - the prebuilt image `evanxsummers/scan-expire`
 
 ```
-evan@dijkstra:~/reo$ sh test/demo.sh
+evan@dijkstra:~/scan-expire$ sh test/demo.sh
 
 ```
 
