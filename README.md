@@ -1,6 +1,6 @@
 # scan-expire
 
-Containerized utility to scan Redis keys and expire keys matching a specified pattern.
+Containerized utility to scan and expire matching Redis keys.
 
 <img src="https://raw.githubusercontent.com/evanx/scan-expire/master/docs/readme/main.png"/>
 

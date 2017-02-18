@@ -1,7 +1,7 @@
 {
   "name": "scan-expire",
   "version": "0.1.0",
-  "description": "Containerized utility to scan Redis keys and expire keys matching a specified pattern.",
+  "description": "Containerized utility to scan and expire matching Redis keys.",
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint --cache src",
