@@ -1,14 +1,15 @@
 
-appName='scan-expire'
-appImage='evanxsummers/scan-expire'
-network='scan-expire-network'
+name='scan-expire'
+appImage="evanxsummers/$name"
+network="$name-network"
+redisName="$name-redis"
 
 removeContainers() {
     for name in $@
     do
-      if docker ps -a -q -f "name=/$appName" | grep '\w'
+      if docker ps -a -q -f "name=/$name" | grep '\w'
       then
-        docker rm -f `docker ps -a -q -f "name=/$appName"`
+        docker rm -f `docker ps -a -q -f "name=/$name"`
       fi
     done
 }
@@ -22,7 +23,7 @@ removeNetwork() {
 
 createRedis() {
   redisContainer=`docker run --network=$network \
-      --name $appName-redis -d redis`
+      --name $redisName -d redis`
   redisHost=`docker inspect $redisContainer |
       grep '"IPAddress":' | tail -1 | sed 's/.*"\([0-9\.]*\)",/\1/'`
 }
@@ -38,7 +39,7 @@ createRedis() {
   redis-cli -h $redisHost -p 6379 set user:other '{"twitter": ""@evanxsummers"}'
   redis-cli -h $redisHost -p 6379 set group:evanxsummers '["evanxsummers"]'
   redis-cli -h $redisHost -p 6379 keys '*'
-  appContainer=`docker run --name $appName-app -d \
+  appContainer=`docker run --name $appName -ir \
     --network=$network \
     -e host=$redisHost \
     -e port=6379 \
@@ -48,6 +49,6 @@ createRedis() {
   sleep 2
   redis-cli -h $redisHost -p 6379 keys '*'
   docker logs $appContainer
-  docker rm -f scan-redis scan-app
-  docker network rm scan-network
+  docker rm -f $redisName $appName
+  docker network rm $network
 )
