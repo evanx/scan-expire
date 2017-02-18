@@ -39,7 +39,6 @@ removeNetwork() {
   docker run --name scan-expire-instance --rm -i \
     --network=scan-expire-network \
     -e host=$redisHost \
-    -e port=6379 \
     -e pattern='user:*' \
     -e ttl=1 \
     scan-expire
