@@ -41,7 +41,7 @@ createRedis() {
   redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
   redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
   redis-cli -h $redisHost keys '*'
-  appContainer=`docker run --name $appName -ir \
+  appContainer=`docker run --name $appName --rm -i \
     --network=$network \
     -e host=$redisHost \
     -e port=6379 \
