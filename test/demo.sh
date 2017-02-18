@@ -36,6 +36,7 @@ createRedis() {
   sleep 1
   docker network create -d bridge $network
   createRedis
+  sleep 1
   redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
   redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
   redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
