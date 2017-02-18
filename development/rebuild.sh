@@ -11,6 +11,6 @@ set -x
 
 cd development
 
-  docker build -t name https://github.com/evanx/$name.git
+  docker build -t $name https://github.com/evanx/$name.git
   docker tag $name $user/$name
   docker push $user/$name
