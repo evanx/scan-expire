@@ -49,6 +49,6 @@ createRedis() {
     -e ttl=1 \
     $appImage
   redis-cli -h $redisHost keys '*'
-  docker rm -f $redisName $appName
+  docker rm -f $redisName
   docker network rm $network
 )
