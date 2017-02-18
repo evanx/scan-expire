@@ -55,24 +55,34 @@ Builds:
 - isolated Redis instance named `scan-expire-redis`
 - this utility `evanx/scan-expire`
 
+First we create the isolated network:
 ```shell
 docker network create -d bridge scan-expire-network
 ```
+
+Then the Redis container on that network:
 ```
 redisContainer=`docker run --network=scan-expire-network \
     --name $redisName -d redis`
 redisHost=`docker inspect $redisContainer |
     grep '"IPAddress":' | tail -1 | sed 's/.*"\([0-9\.]*\)",/\1/'`
 ```
+where we parse its IP number into `redisHost`
+
+We set our test keys:
 ```
 redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
 redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
 redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
-redis-cli -h $redisHost keys '*'
 ```
+where the will expire keys `user:*` and then should only have the `group:evanxsummers` remaining.
+
+We build a container image for this service:
 ```
 docker build -t scan-expire https://github.com/evanx/scan-expire.git
 ```
+
+We interactively run the service on our test Redis container:
 ```
 docker run --name scan-expire-instance --rm -i \
   --network=scan-expire-network \
@@ -81,7 +91,9 @@ docker run --name scan-expire-instance --rm -i \
   -e pattern='user:*' \
   -e ttl=1 \
   scan-expire
+sleep 2
 ```
+where since the `ttl` is 1 second, we sleep for 2 seconds before checking the keys.
 ```
 evan@dijkstra:~/scan-expire$ sh test/demo.sh
 ...
