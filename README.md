@@ -65,10 +65,10 @@ sleep 2
 redis-cli -h $redisHost keys '*'
 ```
 
-Creates:
+Builds:
 - isolated network `scan-expire-network`
 - isolated Redis instance named `scan-expire-redis`
-- the prebuilt image `evanxsummers/scan-expire`
+- this utility `evanx/scan-expire`
 
 ```
 evan@dijkstra:~/scan-expire$ sh test/demo.sh

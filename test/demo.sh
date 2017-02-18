@@ -1,9 +1,7 @@
 
 name='scan-expire'
-appImage="evanxsummers/$name"
 network="$name-network"
 redisName="$name-redis"
-appName="$name-instance"
 
 removeContainers() {
     for name in $@
@@ -30,7 +28,7 @@ createRedis() {
 }
 
 (
-  removeContainers $redisName $appName
+  removeContainers $redisName
   removeNetwork
   set -u -e -x
   sleep 1
@@ -41,13 +39,14 @@ createRedis() {
   redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
   redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
   redis-cli -h $redisHost keys '*'
-  docker run --name $appName --rm -i \
-    --network=$network \
+  docker build -t scan-expire https://github.com/evanx/scan-expire.git
+  docker run --name scan-expire-instance --rm -i \
+    --network=scan-expire-network \
     -e host=$redisHost \
     -e port=6379 \
     -e pattern='user:*' \
     -e ttl=1 \
-    $appImage
+    scan-expire
   sleep 2
   redis-cli -h $redisHost keys '*'
   docker rm -f $redisName
