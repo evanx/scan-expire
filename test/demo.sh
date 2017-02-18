@@ -48,6 +48,7 @@ createRedis() {
     -e pattern='user:*' \
     -e ttl=1 \
     $appImage
+  sleep 2
   redis-cli -h $redisHost keys '*'
   docker rm -f $redisName
   docker network rm $network

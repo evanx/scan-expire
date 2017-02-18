@@ -61,6 +61,7 @@ docker run --name $appName --rm -i \
   -e pattern='user:*' \
   -e ttl=1 \
   $appImage
+sleep 2
 redis-cli -h $redisHost keys '*'
 ```
 
