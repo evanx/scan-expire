@@ -1,0 +1,33 @@
+{
+  "name": "scan-expire",
+  "version": "0.1.0",
+  "description": "Containerized utility to scan Redis keys and expire keys matching a specified pattern.",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint --cache src",
+    "start": "node --harmony lib/index.js"
+  },
+  "author": "@evanxsummers",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "cli-color": "^1.1.0",
+    "fs-blob-store": "^5.2.1",
+    "lodash": "^4.17.4",
+    "multi-exec-async": "^0.2.0",
+    "node-fetch": "^1.6.3",
+    "redis": "^2.6.4",
+    "redis-app-rpf": "^0.1.5"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evanx/scan-expire.git"
+  },
+  "bugs": {
+    "url": "https://github.com/evanx/scan-expire/issues"
+  },
+  "homepage": "https://github.com/evanx/scan-expire#readme"
+}
