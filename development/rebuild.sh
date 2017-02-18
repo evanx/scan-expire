@@ -1,8 +1,7 @@
 
 set -u -e
 
-name=`cat package.json | grep '"name":' |
-  sed 's/.*"\([0-9].*\)",/\1/'`
+name=`cat package.json | jq '.name' | sed 's/"\(.*\)"/\1/'`
 
 user=`npm whoami`
 
