@@ -103,6 +103,8 @@ evan@dijkstra:~/scan-expire$ sh test/demo.sh
 + redis-cli -h $redisHost keys '*'
 1) "group:evanxsummers"
 ```
+where we expired keys `user:*` and so indeed only have `group:evanxsummers` remaining.
+
 
 ## Implementation
 
