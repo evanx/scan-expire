@@ -6,6 +6,8 @@ Containerized utility to scan Redis keys and expire keys matching a specified pa
 
 ## Use case
 
+
+
 ## Config
 
 See `lib/config.js`
@@ -41,6 +43,7 @@ module.exports = {
 
 ## Usage
 
+
 ## Docker
 
 You can build as follows:
@@ -52,15 +55,13 @@ See `test/demo.sh` https://github.com/evanx/reo/blob/master/test/demo.sh
 ```
 
 Creates:
-- isolated network `reo-network`
-- isolated Redis instance named `reo-redis`
-- two `spiped` containers to test encrypt/decrypt tunnels
-- the prebuilt image `evanxsummers/reo`
-- host volume `$HOME/volumes/reo/data`
+- isolated network `scan-expire-network`
+- isolated Redis instance named `scan-expire-redis`
+- the prebuilt image `evanxsummers/scan-expire`
 
 ```
 evan@dijkstra:~/reo$ sh test/demo.sh
-...
+
 ```
 
 ## Implementation
