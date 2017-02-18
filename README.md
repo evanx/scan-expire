@@ -54,13 +54,13 @@ redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
 redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
 redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
 redis-cli -h $redisHost keys '*'
-appContainer=`docker run --name $appName-app -d \
+docker run --name $appName --rm -i \
   --network=$network \
   -e host=$redisHost \
+  -e port=6379 \
   -e pattern='user:*' \
   -e ttl=1 \
-  $appImage`
-sleep 2
+  $appImage
 redis-cli -h $redisHost keys '*'
 ```
 
