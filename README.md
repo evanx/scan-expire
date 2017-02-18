@@ -50,19 +50,18 @@ docker build -t scan-expire https://github.com/evanx/scan-expire.git
 
 See `test/demo.sh` https://github.com/evanx/scan-expire/blob/master/test/demo.sh
 ```shell
-redis-cli -h $redisHost -p 6379 set user:evanxsummers '{"twitter": "@evanxsummers"}'
-redis-cli -h $redisHost -p 6379 set user:other '{"twitter": ""@evanxsummers"}'
-redis-cli -h $redisHost -p 6379 set group:evanxsummers '["evanxsummers"]'
-redis-cli -h $redisHost -p 6379 keys '*'
+redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
+redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
+redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
+redis-cli -h $redisHost keys '*'
 appContainer=`docker run --name $appName-app -d \
   --network=$network \
   -e host=$redisHost \
-  -e port=6379 \
   -e pattern='user:*' \
   -e ttl=1 \
   $appImage`
 sleep 2
-redis-cli -h $redisHost -p 6379 keys '*'
+redis-cli -h $redisHost keys '*'
 ```
 
 Creates:

@@ -3,6 +3,7 @@ name='scan-expire'
 appImage="evanxsummers/$name"
 network="$name-network"
 redisName="$name-redis"
+appName="$name-instance"
 
 removeContainers() {
     for name in $@
@@ -29,16 +30,16 @@ createRedis() {
 }
 
 (
-  removeContainers scan-redis scan-app
+  removeContainers $redisName $appName
   removeNetwork
   set -u -e -x
   sleep 1
   docker network create -d bridge $network
   createRedis
-  redis-cli -h $redisHost -p 6379 set user:evanxsummers '{"twitter": "@evanxsummers"}'
-  redis-cli -h $redisHost -p 6379 set user:other '{"twitter": ""@evanxsummers"}'
-  redis-cli -h $redisHost -p 6379 set group:evanxsummers '["evanxsummers"]'
-  redis-cli -h $redisHost -p 6379 keys '*'
+  redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
+  redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
+  redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
+  redis-cli -h $redisHost keys '*'
   appContainer=`docker run --name $appName -ir \
     --network=$network \
     -e host=$redisHost \
@@ -47,7 +48,7 @@ createRedis() {
     -e ttl=1 \
     $appImage`
   sleep 2
-  redis-cli -h $redisHost -p 6379 keys '*'
+  redis-cli -h $redisHost keys '*'
   docker logs $appContainer
   docker rm -f $redisName $appName
   docker network rm $network
