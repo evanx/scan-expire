@@ -6,7 +6,7 @@ Containerized utility to scan Redis keys and expire keys matching a specified pa
 
 ## Use case
 
-
+We wish to expire a set of keys in Redis matching some pattern.
 
 ## Config
 
