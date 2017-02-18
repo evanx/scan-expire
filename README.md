@@ -57,6 +57,8 @@ Builds:
 
 ```shell
 docker network create -d bridge scan-expire-network
+```
+```
 redisContainer=`docker run --network=scan-expire-network \
     --name $redisName -d redis`
 redisHost=`docker inspect $redisContainer |
@@ -70,6 +72,8 @@ redis-cli -h $redisHost keys '*'
 ```
 ```
 docker build -t scan-expire https://github.com/evanx/scan-expire.git
+```
+```
 docker run --name scan-expire-instance --rm -i \
   --network=scan-expire-network \
   -e host=$redisHost \
