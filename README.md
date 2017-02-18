@@ -74,6 +74,8 @@ evan@dijkstra:~/scan-expire$ sh test/demo.sh
 ...
 1 user:evanxsummers
 1 user:other
+...
++ redis-cli -h $redisHost keys '*'
 1) "group:evanxsummers"
 ```
 
