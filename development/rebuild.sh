@@ -1,13 +1,12 @@
 
 set -u -e
 
-name=`cat package.json | grep '"name":'
+name=`cat package.json | grep '"name":' |
   sed 's/.*"\([0-9].*\)",/\1/'`
 
 user=`npm whoami`
 
 echo "$user/$name"
-sleep 2
 
 set -x
 
