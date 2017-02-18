@@ -1,6 +1,6 @@
 {
   "name": "scan-expire",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Containerized utility to scan and expire matching Redis keys.",
   "main": "lib/index.js",
   "scripts": {

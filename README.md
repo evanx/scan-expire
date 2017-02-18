@@ -72,7 +72,7 @@ where we parse its IP number into `redisHost`
 We set our test keys:
 ```
 redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
-redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
+redis-cli -h $redisHost set user:other '{"twitter": "@evanxsummers"}'
 redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
 ```
 where the will expire keys `user:*` and then should only have the `group:evanxsummers` remaining.
