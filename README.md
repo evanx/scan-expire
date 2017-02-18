@@ -49,11 +49,26 @@ docker build -t scan-expire https://github.com/evanx/scan-expire.git
 ```
 
 See `test/demo.sh` https://github.com/evanx/scan-expire/blob/master/test/demo.sh
+
+Builds:
+- isolated network `scan-expire-network`
+- isolated Redis instance named `scan-expire-redis`
+- this utility `evanx/scan-expire`
+
 ```shell
+docker network create -d bridge scan-expire-network
+redisContainer=`docker run --network=scan-expire-network \
+    --name $redisName -d redis`
+redisHost=`docker inspect $redisContainer |
+    grep '"IPAddress":' | tail -1 | sed 's/.*"\([0-9\.]*\)",/\1/'`
+```
+```
 redis-cli -h $redisHost set user:evanxsummers '{"twitter": "@evanxsummers"}'
 redis-cli -h $redisHost set user:other '{"twitter": ""@evanxsummers"}'
 redis-cli -h $redisHost set group:evanxsummers '["evanxsummers"]'
 redis-cli -h $redisHost keys '*'
+```
+```
 docker build -t scan-expire https://github.com/evanx/scan-expire.git
 docker run --name scan-expire-instance --rm -i \
   --network=scan-expire-network \
@@ -62,15 +77,7 @@ docker run --name scan-expire-instance --rm -i \
   -e pattern='user:*' \
   -e ttl=1 \
   scan-expire
-sleep 2
-redis-cli -h $redisHost keys '*'
 ```
-
-Builds:
-- isolated network `scan-expire-network`
-- isolated Redis instance named `scan-expire-redis`
-- this utility `evanx/scan-expire`
-
 ```
 evan@dijkstra:~/scan-expire$ sh test/demo.sh
 ...
