@@ -13,7 +13,7 @@ We wish to expire a set of keys in Redis matching some pattern.
 See `lib/config.js`
 ```javascript
 module.exports = {
-    description: 'Containerized utility to scan Redis keys and expire keys matching a specified pattern.',
+    description: 'Containerized utility to scan Redis keys and expire all matching keys.',
     required: {
         pattern: {
             description: 'the matching pattern for Redis scan',
@@ -71,7 +71,10 @@ Creates:
 
 ```
 evan@dijkstra:~/scan-expire$ sh test/demo.sh
-
+...
+1 user:evanxsummers
+1 user:other
+1) "group:evanxsummers"
 ```
 
 ## Implementation
