@@ -107,7 +107,7 @@ where we expired keys `user:*` and so indeed only have `group:evanxsummers` rema
 
 ## Implementation
 
-See `lib/index.js`
+See `lib/main.js`
 
 ```javascript
     let cursor;
