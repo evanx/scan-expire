@@ -1,68 +1,39 @@
-# scan-expire
+# retask
 
-Containerized utility to scan and expire matching Redis keys.
+Redis-based dispatcher to parallel pipelines.
 
-<img src="https://raw.githubusercontent.com/evanx/scan-expire/master/docs/readme/main.png"/>
+<img src="https://raw.githubusercontent.com/evanx/retask/master/docs/readme/main.png"/>
 
 ## Use case
-
-We wish to expire a set of keys in Redis matching some pattern.
 
 ## Config
 
 See `lib/config.js`
 ```javascript
-module.exports = {
-    description: 'Containerized utility to scan Redis keys and expire all matching keys.',
-    required: {
-        pattern: {
-            description: 'the matching pattern for Redis scan',
-            example: '*'
-        },
-        ttl: {
-            description: 'the TTL expiry to set on archived keys',
-            unit: 'seconds',
-            example: 60
-        },
-        limit: {
-            description: 'the maximum number of keys to expire',
-            default: 10,
-            note: 'zero means unlimited'
-        },
-        host: {
-            description: 'the Redis host',
-            default: 'localhost'
-        },
-        port: {
-            description: 'the Redis port',
-            default: 6379
-        }
-    }
-}
 ```
 
 ## Docker
 
 You can build as follows:
 ```shell
-docker build -t scan-expire https://github.com/evanx/scan-expire.git
+docker build -t retask https://github.com/evanx/retask.git
 ```
 
-See `test/demo.sh` https://github.com/evanx/scan-expire/blob/master/test/demo.sh
+See `test/demo.sh` https://github.com/evanx/retask/blob/master/test/demo.sh
 
 Builds:
-- isolated network `scan-expire-network`
-- isolated Redis instance named `scan-expire-redis`
-- this utility `evanx/scan-expire`
+- isolated network `retask-network`
+- isolated Redis instance named `retask-redis`
+- this utility `evanx/retask`
 
 First we create the isolated network:
 ```shell
-docker network create -d bridge scan-expire-network
+docker network create -d bridge retask-network
 ```
 
 Then the Redis container on that network:
 ```
-redisContainer=`docker run --network=scan-expire-network \
+redisContainer=`docker run --network=retask-network \
     --name $redisName -d redis`
 redisHost=`docker inspect $redisContainer |
     grep '"IPAddress":' | tail -1 | sed 's/.*"\([0-9\.]*\)",/\1/'`
@@ -79,22 +50,22 @@ where the will expire keys `user:*` and then should only have the `group:evanxsu
 
 We build a container image for this service:
 ```
-docker build -t scan-expire https://github.com/evanx/scan-expire.git
+docker build -t retask https://github.com/evanx/retask.git
 ```
 
 We interactively run the service on our test Redis container:
 ```
-docker run --name scan-expire-instance --rm -i \
-  --network=scan-expire-network \
+docker run --name retask-instance --rm -i \
+  --network=retask-network \
   -e host=$redisHost \
   -e pattern='user:*' \
   -e ttl=1 \
-  scan-expire
+  retask
 sleep 2
 ```
 where since the `ttl` is 1 second, we sleep for 2 seconds before checking the keys.
 ```
-evan@dijkstra:~/scan-expire$ sh test/demo.sh
+evan@dijkstra:~/retask$ sh test/demo.sh
 ...
 1 user:evanxsummers
 1 user:other
